@@ -1,0 +1,144 @@
+:root {
+  --accent: #4f46e5;
+  --accent-dark: #3730a3;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 1rem; align-items: center; }
+.nav-links a { color: var(--text); text-decoration: none; }
+.nav-links a:hover { color: var(--accent); }
+
+.inline-form { display: inline; margin: 0; }
+.link-button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+.link-button:hover { color: var(--danger); }
+
+.container { max-width: 720px; margin: 0 auto; padding: 2rem; }
+
+.hero { text-align: center; padding: 3rem 1rem; }
+.hero h1 { margin-bottom: 0.5rem; }
+.hero p { color: var(--text-muted); margin-bottom: 1.5rem; }
+
+.subscribe-form { display: flex; gap: 0.5rem; justify-content: center; }
+.subscribe-form input {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 260px;
+}
+
+button, .campaign-form button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+button:hover { background: var(--accent-dark); }
+
+.banner { padding: 0.8rem 1.2rem; border-radius: 6px; }
+.banner-success { background: #dcfce7; color: var(--success); }
+
+.entity-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem; }
+.entity-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  gap: 1rem;
+}
+
+.entity-name { font-weight: 600; }
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+.badge-active, .badge-sent { background: #dcfce7; color: var(--success); }
+.badge-unsubscribed { background: #fee2e2; color: var(--danger); }
+.badge-draft { background: #fef9c3; color: #92660a; }
+
+.campaign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+.campaign-form input, .campaign-form textarea {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.campaign-row { flex-direction: column; align-items: stretch; }
+.campaign-info { display: flex; flex-direction: column; gap: 0.3rem; }
+.campaign-body { color: var(--text-muted); margin: 0.2rem 0 0; }
+.campaign-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+
+form.sign-in-form, form.sign-up-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 320px;
+  margin: 2rem auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+form.sign-in-form input, form.sign-up-form input {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.error { color: var(--danger); }

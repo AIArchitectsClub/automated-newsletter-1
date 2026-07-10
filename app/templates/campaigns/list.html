@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Campaigns{% endblock %}
+{% block content %}
+  <h1>Campaigns</h1>
+
+  <form hx-post="/admin/campaigns" hx-target="#campaign-list" hx-swap="beforeend" hx-on::after-request="this.reset()" class="campaign-form">
+    <input name="subject" placeholder="Subject" required>
+    <textarea name="body" placeholder="Message body" required></textarea>
+    <button type="submit">Save draft</button>
+  </form>
+
+  <div id="campaign-list" class="entity-list">
+    {% for campaign in campaigns %}
+      {% include "partials/campaign_row.html" %}
+    {% endfor %}
+  </div>
+{% endblock %}

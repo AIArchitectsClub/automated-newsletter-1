@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Subscribers{% endblock %}
+{% block content %}
+  <h1>Subscribers</h1>
+  <div id="subscriber-list" class="entity-list">
+    {% for subscriber in subscribers %}
+      {% include "partials/subscriber_row.html" %}
+    {% endfor %}
+  </div>
+{% endblock %}

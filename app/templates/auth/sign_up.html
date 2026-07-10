@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+  <h1>Create admin account</h1>
+  <form method="post" action="/auth/sign-up" class="sign-up-form">
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Sign up</button>
+  </form>
+  <p>Already have an account? <a href="/auth/sign-in">Sign in</a></p>
+{% endblock %}

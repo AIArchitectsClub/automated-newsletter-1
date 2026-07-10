@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Subscribe{% endblock %}
+{% block content %}
+  <div class="hero">
+    <h1>Stay in the loop</h1>
+    <p>Get our newsletter delivered straight to your inbox.</p>
+
+    {% if subscribed %}
+      <p class="banner banner-success">You're subscribed. Thanks!</p>
+    {% else %}
+      <form method="post" action="/subscribe" class="subscribe-form">
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

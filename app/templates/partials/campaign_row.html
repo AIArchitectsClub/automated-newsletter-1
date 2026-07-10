@@ -1,0 +1,23 @@
+<div id="campaign-{{ campaign.id }}" class="entity-row campaign-row">
+  <div class="campaign-info">
+    <span class="entity-name">{{ campaign.subject }}</span>
+    <span class="badge badge-{{ campaign.status }}">{{ campaign.status }}</span>
+    <p class="campaign-body">{{ campaign.body }}</p>
+  </div>
+  <div class="campaign-actions">
+    {% if campaign.status != "sent" %}
+      <button
+        hx-post="/admin/campaigns/{{ campaign.id }}/send"
+        hx-target="#campaign-{{ campaign.id }}"
+        hx-swap="outerHTML"
+        hx-confirm="Send this campaign to all active subscribers?"
+      >Send now</button>
+      <button
+        hx-delete="/admin/campaigns/{{ campaign.id }}"
+        hx-target="#campaign-{{ campaign.id }}"
+        hx-swap="outerHTML"
+        hx-confirm="Delete this draft?"
+      >Delete</button>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div id="subscriber-{{ subscriber.id }}" class="entity-row">
+  <span class="entity-name">{{ subscriber.email }}</span>
+  <span class="badge badge-{{ subscriber.status }}">{{ subscriber.status }}</span>
+  <button
+    hx-delete="/admin/subscribers/{{ subscriber.id }}"
+    hx-target="#subscriber-{{ subscriber.id }}"
+    hx-swap="outerHTML"
+    hx-confirm="Remove this subscriber?"
+  >Remove</button>
+</div>

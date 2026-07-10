@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Newsletter{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/subscribe" class="brand">📰 Newsletter</a>
+    <div class="nav-links">
+      {% if current_user %}
+        <a href="/admin/subscribers">Subscribers</a>
+        <a href="/admin/campaigns">Campaigns</a>
+        <form action="/auth/sign-out" method="post" class="inline-form">
+          <button type="submit" class="link-button">Sign out ({{ current_user.name }})</button>
+        </form>
+      {% else %}
+        <a href="/auth/sign-in">Admin sign in</a>
+      {% endif %}
+    </div>
+  </nav>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
