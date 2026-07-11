@@ -47,7 +47,10 @@ def ask_submit(request: Request, q: str = Form(...), user=Depends(require_auth))
     request.session["qa_history"] = history[-MAX_HISTORY_TURNS:]
 
     return templates.TemplateResponse(
-        request, "partials/qa_turn.html", {"turn": {"question": q, "answer": answer, "matches": matches}}
+        # Only show the single closest submission under the answer — the
+        # LLM prompt still sees several matches (see qa.py) for better
+        # synthesis, this just trims what's *displayed*.
+        request, "partials/qa_turn.html", {"turn": {"question": q, "answer": answer, "matches": matches[:1]}}
     )
 
 

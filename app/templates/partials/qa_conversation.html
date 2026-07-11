@@ -1,4 +1,4 @@
-{% for turn in history %}
+{% for turn in history|reverse %}
   {% include "partials/qa_turn.html" %}
 {% else %}
   <p class="text-secondary">Ask a question to get started.</p>

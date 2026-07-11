@@ -12,7 +12,7 @@
 
   {% if turn.matches %}
     <div class="mt-2 ms-2 ps-2 border-start">
-      <p class="text-secondary small mb-2">Sources</p>
+      <p class="text-secondary small mb-2">Closest match</p>
       <div class="d-flex flex-column gap-2">
         {% for submission in turn.matches %}
           {% include "partials/submission_row.html" %}
