@@ -5,6 +5,7 @@
     <h1 class="h4 fw-bold mb-3 text-center">Admin sign in</h1>
     <form method="post" action="/auth/sign-in">
       {% if error %}<div class="alert alert-danger py-2">{{ error }}</div>{% endif %}
+      <input type="hidden" name="next" value="{{ next }}">
       <div class="mb-3">
         <input type="email" name="email" class="form-control" placeholder="Email" required>
       </div>
@@ -13,6 +14,6 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Sign in</button>
     </form>
-    <p class="text-center text-secondary small mt-3 mb-0">No account yet? <a href="/auth/sign-up">Sign up</a></p>
+    <p class="text-center text-secondary small mt-3 mb-0">No account yet? <a href="/auth/sign-up?next={{ next }}">Sign up</a></p>
   </div>
 {% endblock %}

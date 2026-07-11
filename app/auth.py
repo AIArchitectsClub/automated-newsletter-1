@@ -26,5 +26,19 @@ def get_current_user(request: Request):
 def require_auth(request: Request):
     user = get_current_user(request)
     if not user:
-        raise HTTPException(status_code=303, headers={"Location": "/auth/sign-in"})
+        next_path = request.url.path
+        if request.url.query:
+            next_path += f"?{request.url.query}"
+        raise HTTPException(status_code=303, headers={"Location": f"/auth/sign-in?next={next_path}"})
     return user
+
+
+def safe_next_path(path: str) -> str:
+    """Only accept an internal path for post-login redirects — a bare
+    `next=https://evil.example` or `next=//evil.example` (protocol-relative,
+    still an absolute URL to another host) would otherwise be an open
+    redirect once a real login succeeds.
+    """
+    if path.startswith("/") and not path.startswith("//"):
+        return path
+    return "/admin/subscribers"
