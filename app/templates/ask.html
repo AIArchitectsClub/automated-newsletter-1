@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Ask{% endblock %}
+{% block content %}
+  <h1>Ask about the newsletter</h1>
+  <p class="lede">
+    Ask a question and we'll surface the closest matching submissions.
+    Answers are retrieval-based for now — a smarter LLM-generated answer is
+    coming later.
+  </p>
+
+  <input
+    type="search"
+    name="q"
+    placeholder="What do you want to know?"
+    class="search-box"
+    hx-get="/admin/ask/answer"
+    hx-trigger="keyup changed delay:400ms, search"
+    hx-target="#qa-results"
+    hx-swap="innerHTML"
+  >
+
+  <div id="qa-results">
+    {% include "partials/qa_results.html" %}
+  </div>
+{% endblock %}

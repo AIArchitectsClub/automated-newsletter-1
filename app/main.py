@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from starlette.middleware.sessions import SessionMiddleware  # noqa: E402
 
-from app.routes import auth, campaigns, submissions, subscribers  # noqa: E402
+from app.routes import ask, auth, campaigns, submissions, subscribers  # noqa: E402
 
 app = FastAPI()
 app.add_middleware(
@@ -22,6 +22,7 @@ app.include_router(subscribers.router)
 app.include_router(campaigns.router)
 app.include_router(auth.router)
 app.include_router(submissions.router)
+app.include_router(ask.router)
 
 
 @app.get("/")
