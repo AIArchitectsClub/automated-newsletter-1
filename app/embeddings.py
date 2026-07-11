@@ -1,27 +1,30 @@
-import hashlib
 import os
 
-EMBEDDING_API_KEY = os.environ.get("EMBEDDING_API_KEY", "dummy-key")
-EMBEDDING_DIM = 1536
+import requests
+
+HF_API_KEY = os.environ["HUGGINGFACE_API_KEY"]
+EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+EMBEDDING_DIM = 384
+
+_URL = f"https://router.huggingface.co/hf-inference/models/{EMBEDDING_MODEL}/pipeline/feature-extraction"
 
 
 def get_embedding(text: str) -> list[float]:
-    """Dummy embedding — a deterministic pseudo-vector derived from a hash
-    of the text, not a real semantic embedding.
+    """Real semantic embedding via Hugging Face's hosted inference — no
+    local model, no torch/sentence-transformers dependency. Returns a flat
+    384-dim vector directly (this endpoint already mean-pools to one
+    embedding per input; verified by inspecting a live response rather than
+    assumed).
 
-    Swap this for a real provider call (OpenAI text-embedding-3-small,
-    Cohere, Voyage, etc., keyed off EMBEDDING_API_KEY) once a real key is
-    available; every call site already goes through this one function.
-    Keeping EMBEDDING_DIM at 1536 now (OpenAI's text-embedding-3-small
-    size) avoids a column width change later — the pgvector column is
-    declared VECTOR(1536) to match.
-
-    Same text always hashes to the same vector, so exact/near-duplicate
-    text will correctly show up as closest matches in search — enough to
-    prove the storage/query plumbing end to end, but not real semantic
-    similarity between different wording of the same idea.
+    Lets errors propagate rather than falling back to a fake vector — a
+    silently-wrong embedding would corrupt semantic search results in a way
+    that's much harder to notice than an outright failure.
     """
-    digest = hashlib.sha256(text.encode()).digest()
-    values = [(b / 127.5) - 1 for b in digest]
-    repeated = (values * (EMBEDDING_DIM // len(values) + 1))[:EMBEDDING_DIM]
-    return repeated
+    response = requests.post(
+        _URL,
+        headers={"Authorization": f"Bearer {HF_API_KEY}"},
+        json={"inputs": text},
+        timeout=20,
+    )
+    response.raise_for_status()
+    return response.json()

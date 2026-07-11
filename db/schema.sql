@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS submissions (
   team TEXT NOT NULL DEFAULT '',
   title TEXT NOT NULL DEFAULT '',
   body TEXT NOT NULL,
-  embedding VECTOR(1536),
+  embedding VECTOR(384),
   status TEXT NOT NULL DEFAULT 'new',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
