@@ -1,186 +1,63 @@
 :root {
-  --accent: #4f46e5;
-  --accent-dark: #3730a3;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --border: #e2e8f0;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --success: #16a34a;
-  --danger: #dc2626;
+  --bs-primary: #4f46e5;
+  --bs-primary-rgb: 79, 70, 229;
+  --bs-link-color: #4f46e5;
+  --bs-link-hover-color: #3730a3;
+  --bs-border-radius: 0.6rem;
+  --bs-border-radius-sm: 0.45rem;
+  --bs-border-radius-lg: 0.75rem;
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-
-* { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: linear-gradient(180deg, #f2f1fb 0%, #f8fafc 340px);
+  min-height: 100vh;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
+.navbar-brand {
+  color: var(--bs-primary) !important;
 }
 
-.brand {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--accent-dark);
-  text-decoration: none;
+.btn-primary {
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: #3730a3;
+  --bs-btn-hover-border-color: #3730a3;
+  --bs-btn-active-bg: #3730a3;
+  --bs-btn-active-border-color: #3730a3;
 }
 
-.nav-links { display: flex; gap: 1rem; align-items: center; }
-.nav-links a { color: var(--text); text-decoration: none; }
-.nav-links a:hover { color: var(--accent); }
-
-.inline-form { display: inline; margin: 0; }
-.link-button {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-}
-.link-button:hover { color: var(--danger); }
-
-.container { max-width: 720px; margin: 0 auto; padding: 2rem; }
-
-.hero { text-align: center; padding: 3rem 1rem; }
-.hero h1 { margin-bottom: 0.5rem; }
-.hero p { color: var(--text-muted); margin-bottom: 1.5rem; }
-
-.subscribe-form { display: flex; gap: 0.5rem; justify-content: center; }
-.subscribe-form input {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  min-width: 260px;
+.card {
+  border: 1px solid rgba(15, 23, 42, 0.06);
 }
 
-button, .campaign-form button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font: inherit;
+.hover-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-button:hover { background: var(--accent-dark); }
-
-.banner { padding: 0.8rem 1.2rem; border-radius: 6px; }
-.banner-success { background: #dcfce7; color: var(--success); }
-
-.entity-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem; }
-.entity-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.8rem 1.2rem;
-  gap: 1rem;
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.12) !important;
 }
 
-.entity-name { font-weight: 600; }
-
-.badge {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.55rem;
-  border-radius: 999px;
-  background: #e2e8f0;
-  color: var(--text-muted);
-  text-transform: capitalize;
+/* Standard HTMX fade-in recipe: elements start invisible right after being
+   swapped in, then transition to visible once htmx marks them "settling". */
+.htmx-added {
+  opacity: 0;
 }
-.badge-active, .badge-sent { background: #dcfce7; color: var(--success); }
-.badge-unsubscribed { background: #fee2e2; color: var(--danger); }
-.badge-draft { background: #fef9c3; color: #92660a; }
-
-.campaign-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-}
-.campaign-form input, .campaign-form textarea {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font: inherit;
+.htmx-settling {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
 }
 
-.campaign-row { flex-direction: column; align-items: stretch; }
-.campaign-info { display: flex; flex-direction: column; gap: 0.3rem; }
-.campaign-body { color: var(--text-muted); margin: 0.2rem 0 0; }
-.campaign-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
-
-form.sign-in-form, form.sign-up-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  max-width: 320px;
-  margin: 2rem auto;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
+.attachment-thumb {
+  width: 140px;
+  height: 100px;
+  object-fit: cover;
 }
-form.sign-in-form input, form.sign-up-form input {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-}
-.error { color: var(--danger); }
-
-.lede { color: var(--text-muted); margin-top: -0.5rem; }
-
-.contribute-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.2rem;
-}
-.contribute-form input, .contribute-form textarea {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font: inherit;
-}
-.file-label { display: flex; flex-direction: column; gap: 0.3rem; color: var(--text-muted); font-size: 0.9rem; }
-
-.search-box {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  margin: 1rem 0;
-  font: inherit;
+.attachment-video {
+  width: 220px;
 }
 
-.submission-row { flex-direction: column; align-items: stretch; }
-.submission-info { display: flex; flex-direction: column; gap: 0.3rem; }
-.submission-meta { color: var(--text-muted); margin: 0; font-size: 0.85rem; }
-.submission-body { margin: 0.2rem 0 0; }
-.badge-new { background: #dbeafe; color: #1d4ed8; }
-.badge-score { background: #ede9fe; color: #6d28d9; }
-
-.attachments { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem; }
-.attachment-thumb { width: 120px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
-.attachment-video { width: 200px; border-radius: 6px; border: 1px solid var(--border); }
-.attachment-file { align-self: center; font-size: 0.9rem; }
-
-.empty { color: var(--text-muted); }
+.qa-answer {
+  font-size: 1.05rem;
+}

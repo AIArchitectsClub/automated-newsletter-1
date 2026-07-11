@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
 {% block content %}
-  <h1>Admin sign in</h1>
-  <form method="post" action="/auth/sign-in" class="sign-in-form">
-    {% if error %}<p class="error">{{ error }}</p>{% endif %}
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Sign in</button>
-  </form>
-  <p>No account yet? <a href="/auth/sign-up">Sign up</a></p>
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 380px;">
+    <h1 class="h4 fw-bold mb-3 text-center">Admin sign in</h1>
+    <form method="post" action="/auth/sign-in">
+      {% if error %}<div class="alert alert-danger py-2">{{ error }}</div>{% endif %}
+      <div class="mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
+      </div>
+      <div class="mb-3">
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Sign in</button>
+    </form>
+    <p class="text-center text-secondary small mt-3 mb-0">No account yet? <a href="/auth/sign-up">Sign up</a></p>
+  </div>
 {% endblock %}

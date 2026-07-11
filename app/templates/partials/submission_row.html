@@ -1,29 +1,34 @@
-<div id="submission-{{ submission.id }}" class="entity-row submission-row">
-  <div class="submission-info">
-    <span class="entity-name">{{ submission.title or "(untitled)" }}</span>
-    <span class="badge badge-{{ submission.status }}">{{ submission.status }}</span>
-    {% if submission.distance is defined %}
-      <span class="badge badge-score">match {{ "%.0f"|format([0, (1 - submission.distance) * 100]|max) }}%</span>
-    {% endif %}
-    <p class="submission-meta">{{ submission.contributor_name }}{% if submission.team %} &middot; {{ submission.team }}{% endif %}</p>
-    <p class="submission-body">{{ submission.body }}</p>
+<div class="card shadow-sm hover-lift" id="submission-{{ submission.id }}">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+      <h5 class="card-title mb-0">{{ submission.title or "(untitled)" }}</h5>
+      <div class="d-flex gap-2">
+        <span class="badge text-bg-{{ 'info' if submission.status == 'new' else 'secondary' }}">{{ submission.status }}</span>
+        {% if submission.distance is defined %}
+          <span class="badge text-bg-primary">match {{ "%.0f"|format([0, (1 - submission.distance) * 100]|max) }}%</span>
+        {% endif %}
+      </div>
+    </div>
+    <p class="text-secondary small mb-2">{{ submission.contributor_name }}{% if submission.team %} &middot; {{ submission.team }}{% endif %}</p>
+    <p class="card-text">{{ submission.body }}</p>
 
     {% if submission.attachments %}
-      <div class="attachments">
+      <div class="d-flex flex-wrap gap-2 mt-2">
         {% for att in submission.attachments %}
           {% if att.content_type.startswith('image/') %}
-            <img src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="attachment-thumb" alt="{{ att.filename }}">
+            <img src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="attachment-thumb rounded" alt="{{ att.filename }}">
           {% elif att.content_type.startswith('video/') %}
-            <video controls class="attachment-video" src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}"></video>
+            <video controls class="attachment-video rounded" src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}"></video>
           {% else %}
-            <a href="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="attachment-file">{{ att.filename }}</a>
+            <a href="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="btn btn-sm btn-outline-secondary">{{ att.filename }}</a>
           {% endif %}
         {% endfor %}
       </div>
     {% endif %}
   </div>
-  <div class="campaign-actions">
+  <div class="card-footer bg-transparent border-0 pt-0 pb-3 text-end">
     <button
+      class="btn btn-sm btn-outline-danger"
       hx-delete="/admin/submissions/{{ submission.id }}"
       hx-target="#submission-{{ submission.id }}"
       hx-swap="outerHTML"

@@ -1,11 +1,13 @@
 {% if answer %}
-  <p class="banner banner-success qa-answer">{{ answer }}</p>
+  <div class="alert alert-success qa-answer">{{ answer }}</div>
 {% endif %}
 
-{% for submission in matches %}
-  {% include "partials/submission_row.html" %}
-{% else %}
-  {% if asked %}
-    <p class="empty">No matching submissions found — try asking something else.</p>
-  {% endif %}
-{% endfor %}
+<div class="d-flex flex-column gap-3">
+  {% for submission in matches %}
+    {% include "partials/submission_row.html" %}
+  {% else %}
+    {% if asked %}
+      <p class="text-secondary">No matching submissions found — try asking something else.</p>
+    {% endif %}
+  {% endfor %}
+</div>

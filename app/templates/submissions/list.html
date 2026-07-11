@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Submissions{% endblock %}
 {% block content %}
-  <h1>Contributor submissions</h1>
+  <h1 class="fw-bold mb-3">Contributor submissions</h1>
 
   <input
     type="search"
     name="q"
+    class="form-control form-control-lg mb-4"
     placeholder="Semantic search across submissions..."
-    class="search-box"
     hx-get="/admin/submissions/search"
     hx-trigger="keyup changed delay:300ms, search"
     hx-target="#submission-results"
     hx-swap="innerHTML"
   >
 
-  <div id="submission-results" class="entity-list">
+  <div id="submission-results" class="d-flex flex-column gap-3">
     {% include "partials/submission_results.html" %}
   </div>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Ask{% endblock %}
 {% block content %}
-  <h1>Ask about the newsletter</h1>
-  <p class="lede">
+  <h1 class="fw-bold mb-1">Ask about the newsletter</h1>
+  <p class="text-secondary mb-4">
     Ask a question and get an answer generated from the closest matching
     submissions below it.
   </p>
@@ -10,8 +10,8 @@
   <input
     type="search"
     name="q"
+    class="form-control form-control-lg mb-4"
     placeholder="What do you want to know?"
-    class="search-box"
     hx-get="/admin/ask/answer"
     hx-trigger="keyup changed delay:400ms, search"
     hx-target="#qa-results"

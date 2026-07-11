@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Campaigns{% endblock %}
 {% block content %}
-  <h1>Campaigns</h1>
+  <h1 class="fw-bold mb-4">Campaigns</h1>
 
-  <form hx-post="/admin/campaigns" hx-target="#campaign-list" hx-swap="beforeend" hx-on::after-request="this.reset()" class="campaign-form">
-    <input name="subject" placeholder="Subject" required>
-    <textarea name="body" placeholder="Message body" required></textarea>
-    <button type="submit">Save draft</button>
+  <form hx-post="/admin/campaigns" hx-target="#campaign-list" hx-swap="beforeend" hx-on::after-request="this.reset()" class="card shadow-sm p-4 mb-4">
+    <div class="mb-3">
+      <input name="subject" class="form-control" placeholder="Subject" required>
+    </div>
+    <div class="mb-3">
+      <textarea name="body" class="form-control" placeholder="Message body" required rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save draft</button>
   </form>
 
-  <div id="campaign-list" class="entity-list">
+  <div id="campaign-list" class="row row-cols-1 row-cols-lg-2 g-3">
     {% for campaign in campaigns %}
       {% include "partials/campaign_row.html" %}
     {% endfor %}

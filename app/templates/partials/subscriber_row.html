@@ -1,10 +1,17 @@
-<div id="subscriber-{{ subscriber.id }}" class="entity-row">
-  <span class="entity-name">{{ subscriber.email }}</span>
-  <span class="badge badge-{{ subscriber.status }}">{{ subscriber.status }}</span>
-  <button
-    hx-delete="/admin/subscribers/{{ subscriber.id }}"
-    hx-target="#subscriber-{{ subscriber.id }}"
-    hx-swap="outerHTML"
-    hx-confirm="Remove this subscriber?"
-  >Remove</button>
+<div class="col" id="subscriber-{{ subscriber.id }}">
+  <div class="card shadow-sm hover-lift h-100">
+    <div class="card-body d-flex justify-content-between align-items-center gap-2">
+      <div>
+        <div class="fw-semibold">{{ subscriber.email }}</div>
+        <span class="badge text-bg-{{ 'success' if subscriber.status == 'active' else 'danger' }} mt-1">{{ subscriber.status }}</span>
+      </div>
+      <button
+        class="btn btn-sm btn-outline-danger"
+        hx-delete="/admin/subscribers/{{ subscriber.id }}"
+        hx-target="#subscriber-{{ subscriber.id }}"
+        hx-swap="outerHTML"
+        hx-confirm="Remove this subscriber?"
+      >Remove</button>
+    </div>
+  </div>
 </div>
