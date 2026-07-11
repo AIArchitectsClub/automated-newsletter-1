@@ -11,9 +11,11 @@
   <nav class="navbar">
     <a href="/subscribe" class="brand">📰 Newsletter</a>
     <div class="nav-links">
+      <a href="/contribute">Contribute</a>
       {% if current_user %}
         <a href="/admin/subscribers">Subscribers</a>
         <a href="/admin/campaigns">Campaigns</a>
+        <a href="/admin/submissions">Submissions</a>
         <form action="/auth/sign-out" method="post" class="inline-form">
           <button type="submit" class="link-button">Sign out ({{ current_user.name }})</button>
         </form>

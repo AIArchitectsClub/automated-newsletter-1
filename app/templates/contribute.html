@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Contribute content{% endblock %}
+{% block content %}
+  <h1>Submit content for the newsletter</h1>
+  <p class="lede">Share an update from your team — text, photos, or a short clip from an event.</p>
+
+  {% if submitted %}
+    <p class="banner banner-success">Thanks! Your submission was received.</p>
+  {% else %}
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="post" action="/contribute" enctype="multipart/form-data" class="contribute-form">
+      <input type="text" name="contributor_name" placeholder="Your name" required>
+      <input type="text" name="team" placeholder="Team">
+      <input type="text" name="title" placeholder="Title">
+      <textarea name="body" placeholder="Tell us what happened..." required rows="6"></textarea>
+      <label class="file-label">
+        Attach files (images, short clips, documents)
+        <input type="file" name="files" multiple>
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+  {% endif %}
+{% endblock %}

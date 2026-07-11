@@ -1,11 +1,15 @@
+import os
 from pathlib import Path
 
-from app.db import pool
+import psycopg
+from dotenv import load_dotenv
+
+load_dotenv()
 
 schema = Path(__file__).parent.joinpath("schema.sql").read_text()
 
-with pool.connection() as conn:
+with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
     conn.execute(schema)
+    conn.commit()
 
 print("Schema created and seeded.")
-pool.close()

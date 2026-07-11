@@ -1,0 +1,33 @@
+<div id="submission-{{ submission.id }}" class="entity-row submission-row">
+  <div class="submission-info">
+    <span class="entity-name">{{ submission.title or "(untitled)" }}</span>
+    <span class="badge badge-{{ submission.status }}">{{ submission.status }}</span>
+    {% if submission.distance is defined %}
+      <span class="badge badge-score">match {{ "%.0f"|format([0, (1 - submission.distance) * 100]|max) }}%</span>
+    {% endif %}
+    <p class="submission-meta">{{ submission.contributor_name }}{% if submission.team %} &middot; {{ submission.team }}{% endif %}</p>
+    <p class="submission-body">{{ submission.body }}</p>
+
+    {% if submission.attachments %}
+      <div class="attachments">
+        {% for att in submission.attachments %}
+          {% if att.content_type.startswith('image/') %}
+            <img src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="attachment-thumb" alt="{{ att.filename }}">
+          {% elif att.content_type.startswith('video/') %}
+            <video controls class="attachment-video" src="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}"></video>
+          {% else %}
+            <a href="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" class="attachment-file">{{ att.filename }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="campaign-actions">
+    <button
+      hx-delete="/admin/submissions/{{ submission.id }}"
+      hx-target="#submission-{{ submission.id }}"
+      hx-swap="outerHTML"
+      hx-confirm="Delete this submission?"
+    >Delete</button>
+  </div>
+</div>

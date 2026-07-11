@@ -1,0 +1,5 @@
+{% for submission in submissions %}
+  {% include "partials/submission_row.html" %}
+{% else %}
+  <p class="empty">No submissions yet.</p>
+{% endfor %}

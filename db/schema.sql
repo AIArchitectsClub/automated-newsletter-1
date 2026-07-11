@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT UNIQUE NOT NULL,
@@ -23,6 +25,31 @@ CREATE TABLE IF NOT EXISTS campaigns (
   sent_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  contributor_name TEXT NOT NULL,
+  team TEXT NOT NULL DEFAULT '',
+  title TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL,
+  embedding VECTOR(1536),
+  status TEXT NOT NULL DEFAULT 'new',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS submission_attachments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  submission_id UUID NOT NULL REFERENCES submissions(id) ON DELETE CASCADE,
+  filename TEXT NOT NULL,
+  content_type TEXT NOT NULL,
+  size_bytes INTEGER NOT NULL,
+  data BYTEA NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS submission_attachments_submission_idx ON submission_attachments (submission_id);
+
+CREATE INDEX IF NOT EXISTS submissions_embedding_idx ON submissions USING hnsw (embedding vector_cosine_ops);
 
 INSERT INTO subscribers (email, status) VALUES
   ('alice@example.com', 'active'),

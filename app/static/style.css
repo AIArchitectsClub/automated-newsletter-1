@@ -142,3 +142,45 @@ form.sign-in-form input, form.sign-up-form input {
   border-radius: 6px;
 }
 .error { color: var(--danger); }
+
+.lede { color: var(--text-muted); margin-top: -0.5rem; }
+
+.contribute-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+.contribute-form input, .contribute-form textarea {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+.file-label { display: flex; flex-direction: column; gap: 0.3rem; color: var(--text-muted); font-size: 0.9rem; }
+
+.search-box {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 1rem 0;
+  font: inherit;
+}
+
+.submission-row { flex-direction: column; align-items: stretch; }
+.submission-info { display: flex; flex-direction: column; gap: 0.3rem; }
+.submission-meta { color: var(--text-muted); margin: 0; font-size: 0.85rem; }
+.submission-body { margin: 0.2rem 0 0; }
+.badge-new { background: #dbeafe; color: #1d4ed8; }
+.badge-score { background: #ede9fe; color: #6d28d9; }
+
+.attachments { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.6rem; }
+.attachment-thumb { width: 120px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
+.attachment-video { width: 200px; border-radius: 6px; border: 1px solid var(--border); }
+.attachment-file { align-self: center; font-size: 0.9rem; }
+
+.empty { color: var(--text-muted); }
