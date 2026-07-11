@@ -58,6 +58,6 @@ body {
   width: 220px;
 }
 
-.qa-answer {
-  font-size: 1.05rem;
+.qa-bubble {
+  max-width: 80%;
 }

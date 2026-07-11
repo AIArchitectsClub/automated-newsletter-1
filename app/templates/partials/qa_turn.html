@@ -1,0 +1,23 @@
+<div class="qa-turn">
+  <div class="d-flex justify-content-end mb-2">
+    <div class="bg-primary text-white rounded-3 px-3 py-2 qa-bubble">{{ turn.question }}</div>
+  </div>
+  <div class="d-flex justify-content-start">
+    <div class="card shadow-sm qa-bubble">
+      <div class="card-body py-2 px-3">
+        <p class="mb-0">{{ turn.answer }}</p>
+      </div>
+    </div>
+  </div>
+
+  {% if turn.matches %}
+    <div class="mt-2 ms-2 ps-2 border-start">
+      <p class="text-secondary small mb-2">Sources</p>
+      <div class="d-flex flex-column gap-2">
+        {% for submission in turn.matches %}
+          {% include "partials/submission_row.html" %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
