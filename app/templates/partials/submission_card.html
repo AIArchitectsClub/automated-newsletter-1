@@ -1,0 +1,44 @@
+<div class="submission-card" id="submission-{{ submission.id }}" tabindex="0">
+  <div
+    class="submission-card-thumb"
+    {% if submission.attachments and submission.attachments[0].content_type.startswith('image/') %}
+      style="background-image: url('/admin/submissions/{{ submission.id }}/attachments/{{ submission.attachments[0].id }}');"
+    {% endif %}
+  >
+    <div class="submission-card-caption">
+      <strong>{{ submission.title or "(untitled)" }}</strong>
+      <span class="badge text-bg-{{ 'info' if submission.status == 'new' else 'secondary' }}">{{ submission.status }}</span>
+    </div>
+  </div>
+
+  <div class="submission-card-overlay">
+    <button
+      class="btn btn-sm btn-outline-light submission-card-delete"
+      hx-delete="/admin/submissions/{{ submission.id }}"
+      hx-target="#submission-{{ submission.id }}"
+      hx-swap="outerHTML"
+      hx-confirm="Delete this submission?"
+      aria-label="Delete submission"
+    >&times;</button>
+
+    <h6 class="mb-1">{{ submission.title or "(untitled)" }}</h6>
+    <p class="small mb-1 submission-card-meta">
+      {{ submission.contributor_name }}{% if submission.team %} &middot; {{ submission.team }}{% endif %}
+    </p>
+    {% if submission.distance is defined %}
+      <span class="badge text-bg-primary mb-2">match {{ "%.0f"|format([0, (1 - submission.distance) * 100]|max) }}%</span>
+    {% endif %}
+    <p class="submission-card-body">{{ submission.body }}</p>
+
+    {% if submission.attachments %}
+      <div class="submission-card-attachments">
+        {% for att in submission.attachments %}
+          <a href="/admin/submissions/{{ submission.id }}/attachments/{{ att.id }}" target="_blank" class="badge text-bg-light text-dark">
+            {% if att.content_type.startswith('image/') %}🖼{% elif att.content_type.startswith('video/') %}🎬{% else %}📎{% endif %}
+            {{ att.filename }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

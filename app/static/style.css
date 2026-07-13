@@ -61,3 +61,91 @@ body {
 .qa-bubble {
   max-width: 80%;
 }
+
+/* Compact submissions grid: thumbnail cards, full detail revealed on hover. */
+.submission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.submission-card {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--bs-border-radius);
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0e7ff, #f5f3ff);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.submission-card-thumb {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+}
+
+.submission-card-caption {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.75), transparent);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.submission-card-caption strong {
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.submission-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 27, 75, 0.94);
+  color: #fff;
+  padding: 0.9rem;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+/* :focus-within so a keyboard user tabbing onto the delete button (or the
+   card itself, via tabindex) also reveals the overlay — hover alone has no
+   keyboard equivalent, this is the minimum fallback for that gap. */
+.submission-card:hover .submission-card-overlay,
+.submission-card:focus-within .submission-card-overlay {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.submission-card-meta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.submission-card-body {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.submission-card-delete {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  line-height: 1;
+}
+
+.submission-card-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
