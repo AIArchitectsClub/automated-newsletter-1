@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Submissions{% endblock %}
 {% block content %}
-  <h1 class="fw-bold mb-3">Contributor submissions</h1>
+  <h1 class="fw-bold mb-1">Contributor submissions</h1>
+  <p class="text-secondary mb-3">Hover a card for the full brief.</p>
 
   <input
     type="search"
@@ -17,4 +18,57 @@
   <div id="submission-results" class="submission-grid">
     {% include "partials/submission_results.html" %}
   </div>
+
+  <script>
+    function initProjectCards(root) {
+      root.querySelectorAll('.project-card').forEach(function (card) {
+        if (card.dataset.hoverModalInit) return
+        card.dataset.hoverModalInit = '1'
+
+        const modal = document.getElementById(card.dataset.modalTarget)
+        if (!modal) return
+        let closeTimer
+
+        function open() {
+          clearTimeout(closeTimer)
+          modal.classList.add('is-open')
+        }
+        function scheduleClose() {
+          closeTimer = setTimeout(function () { modal.classList.remove('is-open') }, 150)
+        }
+
+        card.addEventListener('mouseenter', open)
+        card.addEventListener('mouseleave', scheduleClose)
+        card.addEventListener('focus', open)
+        modal.addEventListener('mouseenter', open)
+        modal.addEventListener('mouseleave', scheduleClose)
+
+        const closeBtn = modal.querySelector('.project-modal-close')
+        if (closeBtn) closeBtn.addEventListener('click', function () { modal.classList.remove('is-open') })
+
+        modal.addEventListener('click', function (evt) {
+          if (evt.target === modal) modal.classList.remove('is-open')
+        })
+      })
+    }
+
+    initProjectCards(document)
+
+    // Search results are swapped in via HTMX (innerHTML) — newly-inserted
+    // cards need the same listeners attached, since the initial pass above
+    // only ever saw what was on the page at load time.
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+      if (evt.detail.target && evt.detail.target.id === 'submission-results') {
+        initProjectCards(evt.detail.target)
+      }
+    })
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.key === 'Escape') {
+        document.querySelectorAll('.project-modal-backdrop.is-open').forEach(function (modal) {
+          modal.classList.remove('is-open')
+        })
+      }
+    })
+  </script>
 {% endblock %}

@@ -1,3 +1,5 @@
+import hashlib
+
 from fastapi import APIRouter, Depends, File, Form, Request, Response, UploadFile
 from pgvector import Vector
 from psycopg.rows import dict_row
@@ -11,6 +13,50 @@ router = APIRouter()
 
 MAX_FILE_BYTES = 10 * 1024 * 1024
 MAX_VIDEO_BYTES = 50 * 1024 * 1024
+
+# Deterministic team -> (gradient class, icon) so the same team always
+# renders the same card color/icon across requests and page loads, without
+# storing anything extra in the database.
+_CARD_GRADIENTS = ["grad-0", "grad-1", "grad-2", "grad-3", "grad-4", "grad-5", "grad-6", "grad-7"]
+_ICON_KEYWORDS = [
+    ("engineering", "🛠️"),
+    ("market", "📣"),
+    ("sales", "💼"),
+    ("people", "🧑‍🤝‍🧑"),
+    ("hr", "🧑‍🤝‍🧑"),
+    ("human resources", "🧑‍🤝‍🧑"),
+    ("product", "🚀"),
+    ("design", "🎨"),
+    ("customer", "💬"),
+    ("support", "🎧"),
+    ("finance", "💰"),
+    ("legal", "⚖️"),
+    ("community", "🤝"),
+    ("it", "💻"),
+    ("research", "🔬"),
+    ("r&d", "🔬"),
+    ("facilities", "🏢"),
+    ("executive", "🏛️"),
+    ("diversity", "🌈"),
+]
+
+
+def _team_style(team):
+    team_lower = (team or "").lower()
+    icon = "📝"
+    for keyword, emoji in _ICON_KEYWORDS:
+        if keyword in team_lower:
+            icon = emoji
+            break
+    digest = hashlib.md5((team or "").encode()).hexdigest()
+    color_class = _CARD_GRADIENTS[int(digest, 16) % len(_CARD_GRADIENTS)]
+    return color_class, icon
+
+
+def _annotate_card_style(rows):
+    for row in rows:
+        row["card_color"], row["card_icon"] = _team_style(row.get("team"))
+    return rows
 
 _ATTACHMENTS_JOIN = """
     FROM submissions s
@@ -97,7 +143,7 @@ def list_submissions(request: Request, user=Depends(require_auth)):
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(_LIST_QUERY)
             rows = cur.fetchall()
-    return templates.TemplateResponse(request, "submissions/list.html", {"submissions": rows})
+    return templates.TemplateResponse(request, "submissions/list.html", {"submissions": _annotate_card_style(rows)})
 
 
 @router.get("/admin/submissions/search")
@@ -109,7 +155,9 @@ def search_submissions(request: Request, q: str = "", user=Depends(require_auth)
             else:
                 cur.execute(_LIST_QUERY)
             rows = cur.fetchall()
-    return templates.TemplateResponse(request, "partials/submission_results.html", {"submissions": rows})
+    return templates.TemplateResponse(
+        request, "partials/submission_results.html", {"submissions": _annotate_card_style(rows)}
+    )
 
 
 @router.get("/admin/submissions/{submission_id}/attachments/{attachment_id}")

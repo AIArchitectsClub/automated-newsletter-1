@@ -62,90 +62,192 @@ body {
   max-width: 80%;
 }
 
-/* Compact submissions grid: thumbnail cards, full detail revealed on hover. */
+/* Compact submissions grid: colored card + hover-triggered detail modal. */
 .submission-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
 }
 
-.submission-card {
+.project-card {
   position: relative;
-  aspect-ratio: 4 / 3;
   border-radius: var(--bs-border-radius);
   overflow: hidden;
-  background: linear-gradient(135deg, #e0e7ff, #f5f3ff);
+  background: #fff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.project-card:hover,
+.project-card:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.12);
 }
 
-.submission-card-thumb {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
+.project-card-band {
+  position: relative;
+  height: 90px;
   display: flex;
-  align-items: flex-end;
-}
-
-.submission-card-caption {
-  width: 100%;
-  padding: 0.6rem 0.7rem;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.75), transparent);
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
 }
-.submission-card-caption strong {
+.project-card-icon {
+  font-size: 2rem;
+}
+
+.project-card-dot {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.6rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+.project-card-dot-new {
+  background: #fbbf24;
+}
+.project-card-dot-reviewed {
+  background: #34d399;
+}
+
+.project-card-quick-delete {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1e293b;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.project-card:hover .project-card-quick-delete,
+.project-card:focus-within .project-card-quick-delete {
+  opacity: 1;
+}
+
+.project-card-footer {
+  padding: 0.6rem 0.75rem;
+}
+.project-card-title {
+  font-weight: 600;
   font-size: 0.9rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.project-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.project-card-team {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bs-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-.submission-card-overlay {
-  position: absolute;
+/* Card gradient palette — deterministic per team (see _team_style in
+   app/routes/submissions.py), not random per render. */
+.grad-0 { background: linear-gradient(135deg, #4ade80, #16a34a); }
+.grad-1 { background: linear-gradient(135deg, #818cf8, #4338ca); }
+.grad-2 { background: linear-gradient(135deg, #64748b, #1e293b); }
+.grad-3 { background: linear-gradient(135deg, #fb7185, #be123c); }
+.grad-4 { background: linear-gradient(135deg, #a78bfa, #6d28d9); }
+.grad-5 { background: linear-gradient(135deg, #f472b6, #be185d); }
+.grad-6 { background: linear-gradient(135deg, #2dd4bf, #0f766e); }
+.grad-7 { background: linear-gradient(135deg, #fbbf24, #b45309); }
+
+/* Hover-triggered detail modal — display:none (not opacity) while closed
+   so it never occupies a slot in the surrounding CSS grid. */
+.project-modal-backdrop {
+  display: none;
+  position: fixed;
   inset: 0;
-  background: rgba(30, 27, 75, 0.94);
-  color: #fff;
-  padding: 0.9rem;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 1050;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.project-modal-backdrop.is-open {
+  display: flex;
+}
+.project-modal {
+  background: #fff;
+  border-radius: var(--bs-border-radius-lg);
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
   overflow-y: auto;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
+  box-shadow: 0 1.5rem 3rem rgba(15, 23, 42, 0.35);
+  position: relative;
 }
-
-/* :focus-within so a keyboard user tabbing onto the delete button (or the
-   card itself, via tabindex) also reveals the overlay — hover alone has no
-   keyboard equivalent, this is the minimum fallback for that gap. */
-.submission-card:hover .submission-card-overlay,
-.submission-card:focus-within .submission-card-overlay {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.submission-card-meta {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.submission-card-body {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.submission-card-delete {
+.project-modal-close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
   line-height: 1;
+  cursor: pointer;
+  z-index: 1;
 }
-
-.submission-card-attachments {
+.project-modal-header {
+  padding: 1.5rem 1.25rem;
+  color: #fff;
+}
+.project-modal-icon {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.project-modal-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+.project-modal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0;
+}
+.project-modal-body {
+  padding: 1.25rem;
+}
+.project-modal-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.project-modal-body h6 {
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+.project-modal-attachments {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.6rem;
+  gap: 0.5rem;
 }
