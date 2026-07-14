@@ -1,23 +1,23 @@
-<div class="qa-turn">
-  <div class="d-flex justify-content-end mb-2">
-    <div class="bg-primary text-white rounded-3 px-3 py-2 qa-bubble">{{ turn.question }}</div>
+<div class="chat-turn">
+  <div class="chat-row chat-row-user">
+    <div class="chat-bubble chat-bubble-user">{{ turn.question }}</div>
+    <div class="chat-avatar chat-avatar-user">{{ (current_user.name[0] if current_user else "U")|upper }}</div>
   </div>
-  <div class="d-flex justify-content-start">
-    <div class="card shadow-sm qa-bubble">
-      <div class="card-body py-2 px-3">
-        <p class="mb-0">{{ turn.answer }}</p>
-      </div>
+  <div class="chat-row chat-row-assistant">
+    <div class="chat-avatar chat-avatar-assistant">✨</div>
+    <div class="chat-bubble chat-bubble-assistant">
+      <p class="mb-0">{{ turn.answer }}</p>
+      {% if turn.matches %}
+        <details class="chat-source">
+          <summary>📎 Source: {{ turn.matches[0].title or "(untitled)" }}</summary>
+          <div class="chat-source-body">
+            <p class="chat-source-meta">
+              {{ turn.matches[0].contributor_name }}{% if turn.matches[0].team %} &middot; {{ turn.matches[0].team }}{% endif %}
+            </p>
+            <p class="chat-source-snippet">{{ turn.matches[0].body }}</p>
+          </div>
+        </details>
+      {% endif %}
     </div>
   </div>
-
-  {% if turn.matches %}
-    <div class="mt-2 ms-2 ps-2 border-start">
-      <p class="text-secondary small mb-2">Closest match</p>
-      <div class="d-flex flex-column gap-2">
-        {% for submission in turn.matches %}
-          {% include "partials/submission_row.html" %}
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
 </div>

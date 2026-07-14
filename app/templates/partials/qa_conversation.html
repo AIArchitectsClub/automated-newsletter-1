@@ -1,5 +1,12 @@
-{% for turn in history|reverse %}
+{% for turn in history %}
   {% include "partials/qa_turn.html" %}
 {% else %}
-  <p class="text-secondary">Ask a question to get started.</p>
+  <div id="qa-empty-state" class="chat-empty-state">
+    <p class="text-secondary mb-2">Ask a question to get started. Try:</p>
+    <div class="chat-suggestions">
+      <button type="button" class="chat-suggestion-chip" data-question="What has the sales team accomplished recently?">What has the sales team accomplished recently?</button>
+      <button type="button" class="chat-suggestion-chip" data-question="Any updates from engineering?">Any updates from engineering?</button>
+      <button type="button" class="chat-suggestion-chip" data-question="What's new in marketing this month?">What's new in marketing this month?</button>
+    </div>
+  </div>
 {% endfor %}

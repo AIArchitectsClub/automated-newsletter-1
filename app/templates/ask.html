@@ -6,8 +6,8 @@
       <h1 class="fw-bold mb-1">Ask about the newsletter</h1>
       <p class="text-secondary mb-0">
         Ask a question and get an answer generated from the closest matching
-        submission below it. Follow-up questions remember the last few
-        turns of this conversation.
+        submission. Follow-up questions remember the last few turns of this
+        conversation.
       </p>
     </div>
     <button
@@ -19,40 +19,78 @@
     >Clear conversation</button>
   </div>
 
-  <form
-    hx-post="/admin/ask"
-    hx-target="#qa-conversation"
-    hx-swap="afterbegin"
-    hx-indicator="#qa-progress"
-    hx-disabled-elt="#qa-submit-btn"
-    hx-request='{"timeout": 45000}'
-    hx-on::after-request="this.reset()"
-    class="card shadow-sm p-3 mb-3"
-  >
-    <div class="input-group">
-      <input type="text" name="q" class="form-control" placeholder="What do you want to know?" required autocomplete="off">
-      <button type="submit" id="qa-submit-btn" class="btn btn-primary">Ask</button>
+  <div class="chat-shell">
+    <div id="qa-conversation" class="chat-messages">
+      {% include "partials/qa_conversation.html" %}
     </div>
-  </form>
 
-  <div id="qa-progress" class="htmx-indicator mb-3">
-    <div class="progress" style="height: 6px;">
-      <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"></div>
+    <div id="qa-typing" class="chat-typing">
+      <div class="chat-avatar chat-avatar-assistant">✨</div>
+      <div class="chat-typing-bubble"><span></span><span></span><span></span></div>
     </div>
-    <p class="text-secondary small mt-1 mb-0">Thinking…</p>
-  </div>
 
-  <div id="qa-conversation" class="d-flex flex-column gap-3">
-    {% include "partials/qa_conversation.html" %}
+    <form
+      id="qa-form"
+      hx-post="/admin/ask"
+      hx-target="#qa-conversation"
+      hx-swap="beforeend"
+      hx-disabled-elt="#qa-submit-btn"
+      hx-request='{"timeout": 45000}'
+      hx-on::after-request="this.reset()"
+      class="chat-input-bar"
+    >
+      <input type="text" name="q" class="chat-input" placeholder="What do you want to know?" required autocomplete="off">
+      <button type="submit" id="qa-submit-btn" class="chat-send-btn" aria-label="Send">➤</button>
+    </form>
   </div>
 
   <script>
-    document.body.addEventListener('htmx:timeout', function (evt) {
-      const conversation = document.getElementById('qa-conversation');
-      const warning = document.createElement('div');
-      warning.className = 'alert alert-warning';
-      warning.textContent = 'That took too long and timed out — please try again.';
-      conversation.prepend(warning);
-    });
+    (function () {
+      const conversation = document.getElementById('qa-conversation')
+      const typing = document.getElementById('qa-typing')
+      const form = document.getElementById('qa-form')
+
+      function scrollToBottom() {
+        conversation.scrollTop = conversation.scrollHeight
+      }
+      scrollToBottom()
+
+      function bindSuggestionChips(root) {
+        root.querySelectorAll('.chat-suggestion-chip').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            const input = form.querySelector('.chat-input')
+            input.value = chip.dataset.question
+            form.requestSubmit()
+          })
+        })
+      }
+      bindSuggestionChips(conversation)
+
+      form.addEventListener('htmx:beforeRequest', function () {
+        typing.classList.add('is-visible')
+        scrollToBottom()
+      })
+      form.addEventListener('htmx:afterRequest', function () {
+        typing.classList.remove('is-visible')
+        const emptyState = document.getElementById('qa-empty-state')
+        if (emptyState) emptyState.remove()
+      })
+
+      document.body.addEventListener('htmx:afterSwap', function (evt) {
+        if (evt.detail.target && evt.detail.target.id === 'qa-conversation') {
+          bindSuggestionChips(evt.detail.target)
+          scrollToBottom()
+        }
+      })
+
+      document.body.addEventListener('htmx:timeout', function () {
+        typing.classList.remove('is-visible')
+        const warning = document.createElement('div')
+        warning.className = 'alert alert-warning'
+        warning.textContent = 'That took too long and timed out — please try again.'
+        conversation.appendChild(warning)
+        scrollToBottom()
+      })
+    })()
   </script>
 {% endblock %}
