@@ -19,7 +19,7 @@ test.describe('concurrency: two admins racing on the same resource', () => {
     const email = `e2e-race-${Date.now()}@example.com`
 
     try {
-      await pageA.request.post('/subscribe', { form: { email } })
+      await pageA.request.post('/subscribe', { form: { name: 'E2E Race Subscriber', email } })
       const subscriberId = await getSubscriberIdByEmail(email)
       expect(subscriberId).toBeTruthy()
 

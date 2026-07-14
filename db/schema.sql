@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS subscribers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT UNIQUE NOT NULL,
+  name TEXT,
+  team TEXT,
   status TEXT NOT NULL DEFAULT 'active',
   subscribed_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -55,6 +57,8 @@ CREATE TABLE IF NOT EXISTS submissions (
 -- pre-existing table), unlike the earlier embedding-dimension change which
 -- needed a one-time script since it wasn't a simple additive column.
 ALTER TABLE submissions ADD COLUMN IF NOT EXISTS contributor_id UUID REFERENCES contributors(id) ON DELETE SET NULL;
+ALTER TABLE subscribers ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE subscribers ADD COLUMN IF NOT EXISTS team TEXT;
 
 CREATE TABLE IF NOT EXISTS submission_attachments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -69,14 +73,6 @@ CREATE TABLE IF NOT EXISTS submission_attachments (
 CREATE INDEX IF NOT EXISTS submission_attachments_submission_idx ON submission_attachments (submission_id);
 
 CREATE INDEX IF NOT EXISTS submissions_embedding_idx ON submissions USING hnsw (embedding vector_cosine_ops);
-
-INSERT INTO subscribers (email, status) VALUES
-  ('alice@example.com', 'active'),
-  ('bob@example.com', 'active'),
-  ('carol@example.com', 'active'),
-  ('dave@example.com', 'unsubscribed'),
-  ('erin@example.com', 'active')
-ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO campaigns (subject, body, status, sent_at)
 SELECT 'Welcome to our newsletter', 'Thanks for joining!', 'sent', now()

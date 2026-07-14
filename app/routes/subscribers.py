@@ -21,11 +21,14 @@ def subscribe_form(request: Request):
 
 
 @router.post("/subscribe")
-def subscribe(request: Request, email: str = Form(...)):
+def subscribe(request: Request, name: str = Form(...), email: str = Form(...), team: str = Form(None)):
     with pool.connection() as conn:
         conn.execute(
-            "INSERT INTO subscribers (email) VALUES (%s) ON CONFLICT (email) DO NOTHING",
-            (email,),
+            """
+            INSERT INTO subscribers (email, name, team) VALUES (%s, %s, %s)
+            ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, team = EXCLUDED.team, status = 'active'
+            """,
+            (email, name, team),
         )
     return templates.TemplateResponse(request, "subscribe.html", {"subscribed": True})
 

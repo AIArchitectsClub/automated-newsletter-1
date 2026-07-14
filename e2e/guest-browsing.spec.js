@@ -21,7 +21,7 @@ test.describe('guest browsing (no auth required)', () => {
 
     try {
       await subscribePage.goto()
-      await subscribePage.subscribe(email)
+      await subscribePage.subscribe('E2E Subscriber', email, 'QA')
       await expect(subscribePage.successBanner).toBeVisible()
       await expect(subscribePage.successBanner).toHaveText(/subscribed/i)
     } finally {

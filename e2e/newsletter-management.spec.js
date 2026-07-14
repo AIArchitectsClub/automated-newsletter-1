@@ -17,7 +17,7 @@ test.describe('admin subscriber + campaign management', () => {
 
   test('admin can remove a subscriber, and the card is actually gone (not just visually hidden)', async ({ page }) => {
     const email = `e2e-manage-sub-${Date.now()}@example.com`
-    await page.request.post('/subscribe', { form: { email } })
+    await page.request.post('/subscribe', { form: { name: 'E2E Manage Subscriber', email } })
 
     const subscribersPage = new SubscribersPage(page)
     try {

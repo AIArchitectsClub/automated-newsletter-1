@@ -1,17 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Subscribe{% endblock %}
 {% block content %}
-  <div class="text-center py-5">
-    <h1 class="display-6 fw-bold mb-2">Stay in the loop</h1>
-    <p class="text-secondary mb-4">Get our newsletter delivered straight to your inbox.</p>
-
-    {% if subscribed %}
-      <div class="alert alert-success d-inline-block">You're subscribed. Thanks!</div>
-    {% else %}
-      <form method="post" action="/subscribe" class="d-flex justify-content-center gap-2 flex-wrap">
-        <input type="email" name="email" class="form-control w-auto" style="min-width: 260px;" placeholder="you@example.com" required>
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-      </form>
-    {% endif %}
+  <div class="text-center mb-4">
+    <h1 class="fw-bold mb-1 gradient-heading">Stay in the loop</h1>
+    <p class="text-secondary mb-0">Get our newsletter delivered straight to your inbox.</p>
   </div>
+
+  {% if subscribed %}
+    <div class="contribute-success mx-auto">
+      <div class="contribute-success-icon">✓</div>
+      <h2 class="h5 fw-bold mb-2">You're subscribed!</h2>
+      <p class="text-secondary mb-3">Thanks for joining — look out for our next issue in your inbox.</p>
+      <a href="/subscribe" class="btn btn-outline-secondary btn-sm">Subscribe another</a>
+    </div>
+  {% else %}
+    <form method="post" action="/subscribe" class="contribute-card mx-auto">
+      <div class="form-floating mb-3">
+        <input type="text" name="name" id="subscribe_name" class="form-control" placeholder="Your name" required>
+        <label for="subscribe_name">Your name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" name="email" id="subscribe_email" class="form-control" placeholder="you@example.com" required>
+        <label for="subscribe_email">Email</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" name="team" id="subscribe_team" class="form-control" placeholder="Company / team">
+        <label for="subscribe_team">Company / team (optional)</label>
+      </div>
+      <button type="submit" class="btn contribute-submit-btn w-100">Subscribe</button>
+    </form>
+  {% endif %}
 {% endblock %}
