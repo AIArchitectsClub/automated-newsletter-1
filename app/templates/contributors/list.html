@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Contributors{% endblock %}
+{% block content %}
+  <h1 class="fw-bold mb-4">Contributor enrollments</h1>
+
+  <div id="contributor-list" class="d-flex flex-column gap-3">
+    {% for contributor in contributors %}
+      {% include "partials/contributor_row.html" %}
+    {% else %}
+      <p class="text-secondary">No contributor enrollments yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

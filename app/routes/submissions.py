@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, File, Form, Request, Response, UploadFil
 from pgvector import Vector
 from psycopg.rows import dict_row
 
-from app.auth import require_auth
+from app.auth import require_auth, require_contributor
 from app.db import pool
 from app.embeddings import get_embedding
 from app.templating import templates
@@ -81,18 +81,19 @@ _SEARCH_QUERY = f"""
 
 
 @router.get("/contribute")
-def contribute_form(request: Request):
-    return templates.TemplateResponse(request, "contribute.html", {"submitted": False, "error": None})
+def contribute_form(request: Request, identity=Depends(require_contributor)):
+    return templates.TemplateResponse(
+        request, "contribute.html", {"submitted": False, "error": None, "identity": identity}
+    )
 
 
 @router.post("/contribute")
 def contribute(
     request: Request,
-    contributor_name: str = Form(...),
-    team: str = Form(""),
     title: str = Form(""),
     body: str = Form(...),
     files: list[UploadFile] = File(default=[]),
+    identity=Depends(require_contributor),
 ):
     attachments = []
     for f in files:
@@ -108,6 +109,7 @@ def contribute(
                 {
                     "submitted": False,
                     "error": f"{f.filename} is too large (limit {limit // (1024 * 1024)}MB)",
+                    "identity": identity,
                 },
                 status_code=400,
             )
@@ -119,10 +121,10 @@ def contribute(
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """
-                INSERT INTO submissions (contributor_name, team, title, body, embedding)
-                VALUES (%s, %s, %s, %s, %s) RETURNING id
+                INSERT INTO submissions (contributor_id, contributor_name, team, title, body, embedding)
+                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
                 """,
-                (contributor_name, team, title, body, embedding),
+                (identity["id"], identity["name"], identity["team"], title, body, embedding),
             )
             submission = cur.fetchone()
             for filename, content_type, contents in attachments:
@@ -134,7 +136,9 @@ def contribute(
                     (submission["id"], filename, content_type, len(contents), contents),
                 )
 
-    return templates.TemplateResponse(request, "contribute.html", {"submitted": True, "error": None})
+    return templates.TemplateResponse(
+        request, "contribute.html", {"submitted": True, "error": None, "identity": identity}
+    )
 
 
 @router.get("/admin/submissions")

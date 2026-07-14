@@ -2,13 +2,17 @@ import os
 
 from fastapi.templating import Jinja2Templates
 
-from app.auth import get_current_user
+from app.auth import get_current_contributor, get_current_user
 
 _STYLE_PATH = os.path.join("app", "static", "style.css")
 
 
 def inject_current_user(request):
     return {"current_user": get_current_user(request)}
+
+
+def inject_current_contributor(request):
+    return {"current_contributor": get_current_contributor(request)}
 
 
 def inject_asset_version(request):
@@ -28,5 +32,5 @@ def inject_asset_version(request):
 
 templates = Jinja2Templates(
     directory="app/templates",
-    context_processors=[inject_current_user, inject_asset_version],
+    context_processors=[inject_current_user, inject_current_contributor, inject_asset_version],
 )

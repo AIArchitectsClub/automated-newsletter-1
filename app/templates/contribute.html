@@ -19,24 +19,13 @@
   {% else %}
     {% if error %}<div class="alert alert-danger mx-auto contribute-card-width">{{ error }}</div>{% endif %}
     <form method="post" action="/contribute" enctype="multipart/form-data" class="contribute-card mx-auto">
-      <div class="form-floating mb-3">
-        <input type="text" name="contributor_name" id="contributor_name" class="form-control" placeholder="Your name" required>
-        <label for="contributor_name">Your name</label>
-      </div>
+      <p class="text-secondary small mb-3">
+        Contributing as <strong>{{ identity.name }}</strong>{% if identity.team %} &middot; {{ identity.team }}{% endif %}
+      </p>
 
-      <div class="row g-3 mb-3">
-        <div class="col-sm-6">
-          <div class="form-floating">
-            <input type="text" name="team" id="team" class="form-control" placeholder="Team">
-            <label for="team">Team</label>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="form-floating">
-            <input type="text" name="title" id="title" class="form-control" placeholder="Title">
-            <label for="title">Title</label>
-          </div>
-        </div>
+      <div class="form-floating mb-3">
+        <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+        <label for="title">Title</label>
       </div>
 
       <div class="form-floating mb-3">

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Enroll as a contributor{% endblock %}
+{% block content %}
+  <div class="text-center mb-4">
+    <h1 class="fw-bold mb-1 gradient-heading">Become a newsletter contributor</h1>
+    <p class="text-secondary mb-0">Enroll once, then submit updates from your team whenever you have news to share.</p>
+  </div>
+
+  {% if submitted %}
+    <div class="contribute-success mx-auto">
+      <div class="contribute-success-icon">✓</div>
+      <h2 class="h5 fw-bold mb-2">Thanks for enrolling!</h2>
+      <div class="contribute-status-badge mb-2">
+        <span class="contribute-status-dot"></span> Your enrollment is being reviewed
+      </div>
+      <p class="text-secondary mb-3">You'll be emailed once you're approved, and can then sign in to start contributing.</p>
+      <a href="/subscribe" class="btn btn-outline-secondary btn-sm">Back home</a>
+    </div>
+  {% else %}
+    {% if error %}<div class="alert alert-danger mx-auto contribute-card-width">{{ error }}</div>{% endif %}
+    <form method="post" action="/enroll" class="contribute-card mx-auto">
+      <div class="form-floating mb-3">
+        <input type="text" name="name" id="enroll_name" class="form-control" placeholder="Your name" required>
+        <label for="enroll_name">Your name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" name="team" id="enroll_team" class="form-control" placeholder="Team">
+        <label for="enroll_team">Team</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="email" name="email" id="enroll_email" class="form-control" placeholder="Email" required>
+        <label for="enroll_email">Email</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" name="password" id="enroll_password" class="form-control" placeholder="Password" required>
+        <label for="enroll_password">Password</label>
+      </div>
+      <button type="submit" class="btn contribute-submit-btn w-100">Enroll</button>
+    </form>
+    <p class="text-center text-secondary small mt-3">
+      Already enrolled and approved? <a href="/contributor/sign-in">Sign in</a>
+    </p>
+  {% endif %}
+{% endblock %}

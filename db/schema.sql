@@ -26,6 +26,17 @@ CREATE TABLE IF NOT EXISTS campaigns (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS contributors (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  team TEXT NOT NULL DEFAULT '',
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  reviewed_at TIMESTAMPTZ
+);
+
 CREATE TABLE IF NOT EXISTS submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   contributor_name TEXT NOT NULL,
@@ -36,6 +47,14 @@ CREATE TABLE IF NOT EXISTS submissions (
   status TEXT NOT NULL DEFAULT 'new',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Additive column on an already-existing table — CREATE TABLE IF NOT EXISTS
+-- above won't touch a table that already exists, so this is the mechanism
+-- that actually lands the column on production/test databases created
+-- before contributor accounts existed. Idempotent either way (fresh or
+-- pre-existing table), unlike the earlier embedding-dimension change which
+-- needed a one-time script since it wasn't a simple additive column.
+ALTER TABLE submissions ADD COLUMN IF NOT EXISTS contributor_id UUID REFERENCES contributors(id) ON DELETE SET NULL;
 
 CREATE TABLE IF NOT EXISTS submission_attachments (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

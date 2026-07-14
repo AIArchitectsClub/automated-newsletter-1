@@ -20,11 +20,17 @@
           <a href="/admin/subscribers" class="nav-link">Subscribers</a>
           <a href="/admin/campaigns" class="nav-link">Campaigns</a>
           <a href="/admin/submissions" class="nav-link">Submissions</a>
+          <a href="/admin/contributors" class="nav-link">Contributors</a>
           <a href="/admin/ask" class="nav-link">Ask</a>
           <form action="/auth/sign-out" method="post" class="mb-0">
             <button type="submit" class="btn btn-sm btn-outline-secondary">Sign out ({{ current_user.name }})</button>
           </form>
+        {% elif current_contributor %}
+          <form action="/contributor/sign-out" method="post" class="mb-0">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Sign out ({{ current_contributor.name }})</button>
+          </form>
         {% else %}
+          <a href="/contributor/sign-in" class="nav-link">Contributor sign in</a>
           <a href="/auth/sign-in" class="btn btn-sm btn-primary">Admin sign in</a>
         {% endif %}
       </div>
