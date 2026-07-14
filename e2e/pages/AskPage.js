@@ -3,7 +3,7 @@ export class AskPage {
     this.page = page
     this.questionInput = page.locator('input[name="q"]')
     this.submitButton = page.locator('#qa-submit-btn')
-    this.progressBar = page.locator('#qa-progress')
+    this.typingIndicator = page.locator('#qa-typing')
     this.clearButton = page.getByRole('button', { name: 'Clear conversation' })
     this.conversation = page.locator('#qa-conversation')
   }
@@ -17,19 +17,22 @@ export class AskPage {
     await this.submitButton.click()
   }
 
-  // The newest turn is inserted at the top (afterbegin) — see ask.html.
-  firstTurnBubble() {
-    return this.conversation.locator('.qa-turn').first().locator('.bg-primary.qa-bubble')
+  // Newest turn is appended at the bottom (hx-swap="beforeend", chronological
+  // order) — see ask.html. This is the opposite of an early version of this
+  // page, which inserted at the top; don't assume "first" means "newest".
+  lastTurnUserBubble() {
+    return this.conversation.locator('.chat-turn').last().locator('.chat-bubble-user')
   }
 
-  firstTurnAnswer() {
-    // .qa-bubble specifically distinguishes the answer card from a nested
-    // source submission card (also a .card, but without this class) —
-    // see qa_turn.html.
-    return this.conversation.locator('.qa-turn').first().locator('.card.qa-bubble .card-body p')
+  lastTurnAnswer() {
+    // Direct child combinator: the answer's own <p> is a direct child of
+    // .chat-bubble-assistant, but the source citation's meta/snippet
+    // paragraphs are also descendants (nested inside its <details>) — a
+    // plain descendant selector matches all three.
+    return this.conversation.locator('.chat-turn').last().locator('.chat-bubble-assistant > p.mb-0')
   }
 
-  firstTurnSourceCards() {
-    return this.conversation.locator('.qa-turn').first().locator('.card:not(.qa-bubble)')
+  lastTurnSource() {
+    return this.conversation.locator('.chat-turn').last().locator('.chat-source')
   }
 }

@@ -17,6 +17,6 @@ export class SubmissionsPage {
   }
 
   cardByTitle(title) {
-    return this.page.locator('#submission-results .card', { hasText: title })
+    return this.page.locator('#submission-results .project-card', { hasText: title })
   }
 }

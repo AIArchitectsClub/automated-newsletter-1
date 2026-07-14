@@ -26,7 +26,7 @@ test.describe('semantic search over submissions (real embeddings)', () => {
 
     await submissionsPage.search('cloud infrastructure deployment kubernetes')
 
-    const results = page.locator('#submission-results .card-title')
+    const results = page.locator('#submission-results .project-card-title')
     await expect(results.first()).toHaveText('Migrated core services to Kubernetes', { timeout: 20_000 })
   })
 
@@ -35,11 +35,11 @@ test.describe('semantic search over submissions (real embeddings)', () => {
     await submissionsPage.goto()
 
     await submissionsPage.search('research paper')
-    await expect(page.locator('#submission-results .card-title').first()).toBeVisible({ timeout: 20_000 })
+    await expect(page.locator('#submission-results .project-card-title').first()).toBeVisible({ timeout: 20_000 })
 
     await submissionsPage.search('')
     // Empty query falls back to the plain list query (_LIST_QUERY) — more
     // than the single top match a real search would narrow down to.
-    await expect(page.locator('#submission-results .card')).not.toHaveCount(1)
+    await expect(page.locator('#submission-results .project-card')).not.toHaveCount(1)
   })
 })

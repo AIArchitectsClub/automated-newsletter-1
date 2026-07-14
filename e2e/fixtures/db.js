@@ -35,13 +35,22 @@ export async function deleteCampaignBySubject(subject) {
   await getPool().query('DELETE FROM campaigns WHERE subject = $1', [subject])
 }
 
+export async function getContributorIdByEmail(email) {
+  const { rows } = await getPool().query('SELECT id FROM contributors WHERE email = $1', [email])
+  return rows[0]?.id
+}
+
+export async function deleteContributorByEmail(email) {
+  await getPool().query('DELETE FROM contributors WHERE email = $1', [email])
+}
+
 // Cascades to submission_attachments via ON DELETE CASCADE — one delete
 // covers both tables.
 export async function deleteSubmissionByTitle(title) {
   await getPool().query('DELETE FROM submissions WHERE title = $1', [title])
 }
 
-const KNOWN_TABLES = ['users', 'subscribers', 'campaigns', 'submissions', 'submission_attachments']
+const KNOWN_TABLES = ['users', 'subscribers', 'campaigns', 'submissions', 'submission_attachments', 'contributors']
 
 // `table` is only ever a hardcoded literal from spec files, never
 // user input — this allowlist is defense-in-depth against a future typo
