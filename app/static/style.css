@@ -371,6 +371,29 @@ body {
   margin: 0 auto 1rem;
 }
 
+.contribute-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.contribute-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #f59e0b;
+  animation: contribute-status-pulse 1.6s infinite ease-in-out;
+}
+@keyframes contribute-status-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.4); }
+}
+
 /* Compact submissions grid: colored card + hover-triggered detail modal. */
 .submission-grid {
   display: grid;
