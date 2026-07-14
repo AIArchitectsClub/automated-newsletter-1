@@ -14,9 +14,16 @@
   </div>
   <div class="project-card-footer">
     <div class="project-card-title">{{ submission.title or "(untitled)" }}</div>
+    <p class="project-card-snippet">{{ submission.body }}</p>
     <div class="project-card-meta">
       <span class="project-card-team">{{ submission.team or "General" }}</span>
       <span class="badge text-bg-{{ 'info' if submission.status == 'new' else 'secondary' }}">{{ submission.status }}</span>
+    </div>
+    <div class="project-card-submeta">
+      <span>{{ submission.contributor_name }}</span>
+      {% if submission.attachments %}
+        <span>📎 {{ submission.attachments|length }}</span>
+      {% endif %}
     </div>
   </div>
 </div>

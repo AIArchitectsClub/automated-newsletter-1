@@ -85,21 +85,21 @@ body {
 
 .project-card-band {
   position: relative;
-  height: 90px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .project-card-icon {
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 .project-card-dot {
   position: absolute;
-  top: 0.5rem;
-  left: 0.6rem;
-  width: 0.55rem;
-  height: 0.55rem;
+  top: 0.4rem;
+  left: 0.55rem;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
 }
 .project-card-dot-new {
@@ -111,15 +111,15 @@ body {
 
 .project-card-quick-delete {
   position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
-  width: 1.6rem;
-  height: 1.6rem;
+  top: 0.3rem;
+  right: 0.3rem;
+  width: 1.3rem;
+  height: 1.3rem;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.85);
   color: #1e293b;
-  font-size: 1rem;
+  font-size: 0.85rem;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -134,7 +134,7 @@ body {
 }
 
 .project-card-footer {
-  padding: 0.6rem 0.75rem;
+  padding: 0.65rem 0.75rem;
 }
 .project-card-title {
   font-weight: 600;
@@ -143,12 +143,22 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.project-card-snippet {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0.3rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.1em;
+}
 .project-card-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.35rem;
+  margin-top: 0.5rem;
 }
 .project-card-team {
   font-size: 0.72rem;
@@ -160,17 +170,34 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.project-card-submeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+.project-card-submeta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* Card gradient palette — deterministic per team (see _team_style in
-   app/routes/submissions.py), not random per render. */
-.grad-0 { background: linear-gradient(135deg, #4ade80, #16a34a); }
-.grad-1 { background: linear-gradient(135deg, #818cf8, #4338ca); }
-.grad-2 { background: linear-gradient(135deg, #64748b, #1e293b); }
-.grad-3 { background: linear-gradient(135deg, #fb7185, #be123c); }
-.grad-4 { background: linear-gradient(135deg, #a78bfa, #6d28d9); }
-.grad-5 { background: linear-gradient(135deg, #f472b6, #be185d); }
-.grad-6 { background: linear-gradient(135deg, #2dd4bf, #0f766e); }
-.grad-7 { background: linear-gradient(135deg, #fbbf24, #b45309); }
+   app/routes/submissions.py), not random per render. Muted/dusty tones —
+   the original palette here was too saturated to look at for long. */
+.grad-0 { background: linear-gradient(135deg, #86a889, #4f6b52); }
+.grad-1 { background: linear-gradient(135deg, #8f97c2, #565c92); }
+.grad-2 { background: linear-gradient(135deg, #8b95a5, #48505e); }
+.grad-3 { background: linear-gradient(135deg, #c99298, #935a60); }
+.grad-4 { background: linear-gradient(135deg, #a99bc4, #6c5990); }
+.grad-5 { background: linear-gradient(135deg, #c993ae, #93597a); }
+.grad-6 { background: linear-gradient(135deg, #85aaa6, #4c6f68); }
+.grad-7 { background: linear-gradient(135deg, #c7ac82, #8f6a3d); }
 
 /* Hover-triggered detail modal — display:none (not opacity) while closed
    so it never occupies a slot in the surrounding CSS grid. */
