@@ -61,7 +61,7 @@ body {
 }
 
 /* Q&A chat interface */
-.chat-heading {
+.gradient-heading {
   background: var(--chat-gradient);
   -webkit-background-clip: text;
   background-clip: text;
@@ -283,6 +283,92 @@ body {
   opacity: 0.6;
   cursor: default;
   transform: none;
+}
+
+/* Contribute form */
+.contribute-card-width {
+  max-width: 640px;
+}
+.contribute-card {
+  max-width: 640px;
+  background: #fff;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    var(--chat-gradient) border-box;
+  border-radius: var(--bs-border-radius-lg);
+  box-shadow: 0 10px 34px -8px var(--chat-glow);
+  padding: 2rem;
+}
+
+.contribute-dropzone {
+  display: block;
+  border: 2px dashed rgba(124, 58, 237, 0.3);
+  border-radius: var(--bs-border-radius);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.03), rgba(236, 72, 153, 0.03));
+}
+.contribute-dropzone:hover,
+.contribute-dropzone.is-dragover {
+  border-color: #a78bfa;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.08), rgba(236, 72, 153, 0.08));
+}
+.contribute-dropzone-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.contribute-file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: #475569;
+}
+.contribute-file-list li {
+  padding: 0.3rem 0.6rem;
+  background: #f8fafc;
+  border-radius: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.contribute-submit-btn {
+  background: var(--chat-gradient);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 14px -2px var(--chat-glow);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.contribute-submit-btn:hover {
+  color: #fff;
+  box-shadow: 0 6px 18px -2px var(--chat-glow);
+  transform: translateY(-1px);
+}
+
+.contribute-success {
+  max-width: 480px;
+  text-align: center;
+  background: #fff;
+  border-radius: var(--bs-border-radius-lg);
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 34px -8px var(--chat-glow);
+}
+.contribute-success-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--chat-gradient);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin: 0 auto 1rem;
 }
 
 /* Compact submissions grid: colored card + hover-triggered detail modal. */

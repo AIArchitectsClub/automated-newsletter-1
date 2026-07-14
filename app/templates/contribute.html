@@ -1,31 +1,93 @@
 {% extends "base.html" %}
 {% block title %}Contribute content{% endblock %}
 {% block content %}
-  <h1 class="fw-bold mb-1">Submit content for the newsletter</h1>
-  <p class="text-secondary mb-4">Share an update from your team — text, photos, or a short clip from an event.</p>
+  <div class="text-center mb-4">
+    <h1 class="fw-bold mb-1 gradient-heading">Share your team's story</h1>
+    <p class="text-secondary mb-0">Submit an update, photos, or a short clip — it'll be reviewed for the next newsletter.</p>
+  </div>
 
   {% if submitted %}
-    <div class="alert alert-success">Thanks! Your submission was received.</div>
+    <div class="contribute-success mx-auto">
+      <div class="contribute-success-icon">✓</div>
+      <h2 class="h5 fw-bold mb-1">Thanks! Your submission was received.</h2>
+      <p class="text-secondary mb-3">We'll review it for an upcoming newsletter.</p>
+      <a href="/contribute" class="btn btn-outline-secondary btn-sm">Submit another</a>
+    </div>
   {% else %}
-    {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
-    <form method="post" action="/contribute" enctype="multipart/form-data" class="card shadow-sm p-4">
-      <div class="mb-3">
-        <input type="text" name="contributor_name" class="form-control" placeholder="Your name" required>
+    {% if error %}<div class="alert alert-danger mx-auto contribute-card-width">{{ error }}</div>{% endif %}
+    <form method="post" action="/contribute" enctype="multipart/form-data" class="contribute-card mx-auto">
+      <div class="form-floating mb-3">
+        <input type="text" name="contributor_name" id="contributor_name" class="form-control" placeholder="Your name" required>
+        <label for="contributor_name">Your name</label>
       </div>
-      <div class="mb-3">
-        <input type="text" name="team" class="form-control" placeholder="Team">
+
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6">
+          <div class="form-floating">
+            <input type="text" name="team" id="team" class="form-control" placeholder="Team">
+            <label for="team">Team</label>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-floating">
+            <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+            <label for="title">Title</label>
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <input type="text" name="title" class="form-control" placeholder="Title">
+
+      <div class="form-floating mb-3">
+        <textarea name="body" id="body" class="form-control" placeholder="Tell us what happened..." required style="height: 140px"></textarea>
+        <label for="body">Tell us what happened...</label>
       </div>
-      <div class="mb-3">
-        <textarea name="body" class="form-control" placeholder="Tell us what happened..." required rows="6"></textarea>
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-secondary small">Attach files (images, short clips, documents)</label>
-        <input type="file" name="files" multiple class="form-control">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+
+      <label class="form-label text-secondary small">Attachments</label>
+      <label class="contribute-dropzone" id="contribute-dropzone" for="contribute-files">
+        <div class="contribute-dropzone-icon">📎</div>
+        <p class="mb-0"><strong>Drag files here</strong> or click to browse</p>
+        <p class="text-secondary small mb-0">Images &amp; docs up to 10MB, video clips up to 50MB</p>
+        <input type="file" name="files" id="contribute-files" multiple hidden>
+      </label>
+      <ul class="contribute-file-list" id="contribute-file-list"></ul>
+
+      <button type="submit" class="btn contribute-submit-btn w-100 mt-3">Submit for review</button>
     </form>
   {% endif %}
+
+  <script>
+    (function () {
+      const dropzone = document.getElementById('contribute-dropzone')
+      if (!dropzone) return
+      const input = document.getElementById('contribute-files')
+      const fileList = document.getElementById('contribute-file-list')
+
+      function renderFileList() {
+        fileList.innerHTML = ''
+        Array.from(input.files).forEach(function (file) {
+          const li = document.createElement('li')
+          li.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' KB)'
+          fileList.appendChild(li)
+        })
+      }
+
+      input.addEventListener('change', renderFileList)
+
+      ;['dragenter', 'dragover'].forEach(function (evt) {
+        dropzone.addEventListener(evt, function (e) {
+          e.preventDefault()
+          dropzone.classList.add('is-dragover')
+        })
+      })
+      ;['dragleave', 'drop'].forEach(function (evt) {
+        dropzone.addEventListener(evt, function (e) {
+          e.preventDefault()
+          dropzone.classList.remove('is-dragover')
+        })
+      })
+      dropzone.addEventListener('drop', function (e) {
+        input.files = e.dataTransfer.files
+        renderFileList()
+      })
+    })()
+  </script>
 {% endblock %}
