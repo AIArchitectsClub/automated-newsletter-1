@@ -9,7 +9,10 @@ test.describe('contributor enrollment lifecycle', () => {
     await expect(page).toHaveURL(/\/contributor\/sign-in\?next=\/contribute/)
   })
 
-  test('enroll shows a pending-review message, and signing in before approval is blocked', async ({ page }) => {
+  // Enrollment shows a "being reviewed" message for the contributor, but is
+  // actually auto-approved in the backend immediately — no admin action
+  // required. This intentionally tests that cosmetic-vs-real split.
+  test('enroll shows a pending-review message, but the contributor is auto-approved and can sign in right away', async ({ page }) => {
     const unique = Date.now()
     const email = `e2e-enroll-${unique}@example.com`
     const password = 'verify-secret-123'
@@ -24,15 +27,13 @@ test.describe('contributor enrollment lifecycle', () => {
 
       await signInPage.goto()
       await signInPage.signIn(email, password)
-      await expect(signInPage.errorBanner).toBeVisible()
-      await expect(signInPage.errorBanner).toHaveText(/still under review/i)
-      await expect(page).not.toHaveURL(/\/contribute$/)
+      await expect(page).toHaveURL(/\/contribute$/)
     } finally {
       await deleteContributorByEmail(email)
     }
   })
 
-  test('admin approves a pending contributor, who can then sign in and reach /contribute', async ({ browser }) => {
+  test('newly enrolled contributors already show as approved in the admin list, with no action needed', async ({ browser }) => {
     const adminContext = await browser.newContext()
     const contributorContext = await browser.newContext()
     const adminPage = await adminContext.newPage()
@@ -51,11 +52,8 @@ test.describe('contributor enrollment lifecycle', () => {
       await adminPage.goto('/admin/contributors')
       const row = adminPage.locator('.card', { hasText: email })
       await expect(row).toBeVisible()
-      await expect(row.locator('.badge')).toHaveText('pending')
-
-      await row.getByRole('button', { name: 'Approve' }).click()
       await expect(row.locator('.badge')).toHaveText('approved')
-      // Approved rows lose their action buttons (see contributor_row.html).
+      // Approved rows have no Approve/Deny buttons (see contributor_row.html).
       await expect(row.getByRole('button', { name: 'Approve' })).toHaveCount(0)
 
       const signInPage = new ContributorSignInPage(contributorPage)
@@ -70,7 +68,10 @@ test.describe('contributor enrollment lifecycle', () => {
     }
   })
 
-  test('admin denies a pending contributor, whose sign-in stays blocked with a clear message', async ({ browser }) => {
+  // Enrollment auto-approves, but the deny endpoint doesn't gate on current
+  // status — admin can still revoke access via a direct API call even
+  // though the UI no longer shows a Deny button for an already-approved row.
+  test('admin can deny an auto-approved contributor via the API, whose sign-in then stays blocked', async ({ browser }) => {
     const adminContext = await browser.newContext()
     const contributorContext = await browser.newContext()
     const adminPage = await adminContext.newPage()

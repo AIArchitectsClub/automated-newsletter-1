@@ -35,8 +35,8 @@ def enroll(
                 )
             cur.execute(
                 """
-                INSERT INTO contributors (name, team, email, password_hash)
-                VALUES (%s, %s, %s, %s)
+                INSERT INTO contributors (name, team, email, password_hash, status, reviewed_at)
+                VALUES (%s, %s, %s, %s, 'approved', now())
                 """,
                 (name, team, email, hash_password(password)),
             )
